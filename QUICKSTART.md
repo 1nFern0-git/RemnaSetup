@@ -6,23 +6,36 @@
 
 ```bash
 # Скачайте и примените патч одной командой:
-curl -fsSL https://ваш-сервер/apply-geo-patch.sh | sudo bash
+bash <(curl -fsSL https://raw.githubusercontent.com/1nFern0-git/RemnaSetup/dev/apply-geo-patch.sh)
+```
+
+### Для новой установки RemnaSetup с Geo модулем:
+
+```bash
+# Установите RemnaSetup v2.6 Enhanced Edition одной командой:
+bash <(curl -fsSL https://raw.githubusercontent.com/1nFern0-git/RemnaSetup/dev/install.sh)
 ```
 
 ИЛИ поэтапно:
 
 ```bash
-# 1. Скачайте файлы модификации
-cd /tmp
-git clone https://github.com/ваш-репозиторий/remnasetup-geo-mod.git
-cd remnasetup-geo-mod
+# 1. Скачайте репозиторий
+git clone -b dev https://github.com/1nFern0-git/RemnaSetup.git
+cd RemnaSetup
 
-# 2. Примените патч
-sudo bash apply-geo-patch.sh
+# 2. Запустите установку
+sudo bash install.sh
 
-# 3. Запустите RemnaSetup
-cd /opt/remnasetup
-sudo bash remnasetup.sh
+# 3. Выберите: 2 (Remnanode) → 8 (Geo Files Management)
+```
+
+**Альтернативный метод (wget):**
+
+```bash
+# Скачать и запустить
+wget -O install.sh https://raw.githubusercontent.com/1nFern0-git/RemnaSetup/dev/install.sh
+chmod +x install.sh
+sudo bash install.sh
 ```
 
 ## 📦 Что будет установлено?

@@ -55,41 +55,24 @@ volumes:
 
 ## 🚀 Быстрая установка
 
-### Вариант 1: Автоматический патч (рекомендуется)
-
-Для **существующей** установки RemnaSetup:
+### Вариант 1: Новая установка RemnaSetup v2.6 (рекомендуется)
 
 ```bash
-# Скачайте файлы модификации
-cd /tmp
-# [загрузите архив с файлами]
-
-# Примените патч
-sudo bash apply-geo-patch.sh
-
-# Готово! Запустите RemnaSetup
-cd /opt/remnasetup
-sudo bash remnasetup.sh
+bash <(curl -fsSL https://raw.githubusercontent.com/1nFern0-git/RemnaSetup/dev/install.sh)
 ```
 
-### Вариант 2: Ручная установка отдельных файлов
-
-Если нужен контроль над каждым файлом:
+### Вариант 2: Патч для существующей установки
 
 ```bash
-# 1. Geo скрипт
-sudo cp scripts/remnanode/install-geo.sh /opt/remnasetup/scripts/remnanode/
-sudo chmod +x /opt/remnasetup/scripts/remnanode/install-geo.sh
+bash <(curl -fsSL https://raw.githubusercontent.com/1nFern0-git/RemnaSetup/dev/apply-geo-patch.sh)
+```
 
-# 2. Переводы
-sudo cat scripts/common/languages-geo-addon.sh >> /opt/remnasetup/scripts/common/languages.sh
+### Вариант 3: Клонирование репозитория
 
-# 3. Главный скрипт
-sudo cp remnasetup.sh /opt/remnasetup/remnasetup.sh
-sudo chmod +x /opt/remnasetup/remnasetup.sh
-
-# 4. Установка прав
-sudo chown -R $(whoami):$(whoami) /opt/remnasetup
+```bash
+git clone -b dev https://github.com/1nFern0-git/RemnaSetup.git
+cd RemnaSetup
+sudo bash install.sh
 ```
 
 ## 📖 Документация
