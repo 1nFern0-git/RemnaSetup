@@ -48,7 +48,7 @@ print_header() {
         echo -e "${GREEN}RemnaSetup by capybara${RESET}"
         echo -e "${CYAN}Project: https://github.com/Capybara-z/RemnaSetup${RESET}"
         echo -e "${YELLOW}Contacts: @KaTTuBaRa${RESET}"
-        echo -e "${CYAN}Version: 2.5${RESET}"
+        echo -e "${CYAN}Version: 2.6 (with Geo Files)${RESET}"
         echo
         echo -e "${MAGENTA}────────────────────────────────────────────────────────────${RESET}"
         echo -e "${YELLOW}Made with support from:${RESET}"
@@ -58,7 +58,7 @@ print_header() {
         echo -e "${GREEN}RemnaSetup by capybara${RESET}"
         echo -e "${CYAN}Проект: https://github.com/Capybara-z/RemnaSetup${RESET}"
         echo -e "${YELLOW}Контакты: @KaTTuBaRa${RESET}"
-        echo -e "${CYAN}Версия: 2.5${RESET}"
+        echo -e "${CYAN}Версия: 2.6 (с Geo файлами)${RESET}"
         echo
         echo -e "${MAGENTA}────────────────────────────────────────────────────────────${RESET}"
         echo -e "${YELLOW}Сделано при поддержке проекта:${RESET}"
@@ -109,7 +109,8 @@ display_remnanode_menu() {
         echo -e "${BLUE}5. Install BBR only${RESET}"
         echo -e "${BLUE}6. Install WARP-NATIVE (by distillium)${RESET}"
         echo -e "${BLUE}7. Update Remnanode${RESET}"
-        echo -e "${BLUE}8. Back${RESET}"
+        echo -e "${GREEN}8. 🌍 Geo Files Management${RESET}"
+        echo -e "${BLUE}9. Back${RESET}"
     else
         echo -e "${BLUE}1. Полная установка (Remnanode + Caddy + BBR + WARP-NATIVE (by distillium))${RESET}"
         echo -e "${BLUE}2. Только Remnanode${RESET}"
@@ -118,7 +119,8 @@ display_remnanode_menu() {
         echo -e "${BLUE}5. Только BBR${RESET}"
         echo -e "${BLUE}6. Установить WARP-NATIVE (by distillium)${RESET}"
         echo -e "${BLUE}7. Обновить Remnanode${RESET}"
-        echo -e "${BLUE}8. Назад${RESET}"
+        echo -e "${GREEN}8. 🌍 Управление Geo файлами${RESET}"
+        echo -e "${BLUE}9. Назад${RESET}"
     fi
     echo
     read -p "$(echo -e "${BOLD_CYAN}$(get_string "select_option"):${RESET}") " REMNANODE_OPTION
@@ -212,7 +214,8 @@ main() {
                         5) run_script "${SCRIPT_DIR}/scripts/remnanode/install-bbr.sh" ;;
                         6) run_script "${SCRIPT_DIR}/scripts/remnanode/install-warp.sh" ;;
                         7) run_script "${SCRIPT_DIR}/scripts/remnanode/update.sh" ;;
-                        8) break ;;
+                        8) run_script "${SCRIPT_DIR}/scripts/remnanode/install-geo.sh" ;;
+                        9) break ;;
                         *) warn "$(get_string "invalid_choice")" ;;
                     esac
                 done
@@ -241,4 +244,4 @@ main() {
     done
 }
 
-main 
+main
