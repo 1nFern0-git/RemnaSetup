@@ -137,11 +137,11 @@
 
 - Вариант 1
 ```bash
-bash <(curl -fsSL https://raw.githubusercontent.com/1nFern0-git/RemnaSetup/refs/heads/dev/install.sh)
+bash <(curl -fsSL https://raw.githubusercontent.com/1nFern0-git/RemnaSetup/refs/heads/main/install.sh)
 ```
 - Вариант 2
 ```bash
-curl -fsSL https://raw.githubusercontent.com/1nFern0-git/RemnaSetup/refs/heads/dev/install.sh -o install.sh && chmod +x install.sh && sudo bash ./install.sh
+curl -fsSL https://raw.githubusercontent.com/1nFern0-git/RemnaSetup/refs/heads/main/install.sh -o install.sh && chmod +x install.sh && sudo bash ./install.sh
 ```
 
 ---
