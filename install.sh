@@ -32,9 +32,9 @@ fi
 
 cd "$TEMP_DIR" || exit 1
 
-echo "Downloading RemnaSetup..."
-echo "Загрузка RemnaSetup..."
-curl -L https://github.com/Capybara-z/RemnaSetup/archive/refs/heads/main.zip -o remnasetup.zip
+echo "Downloading RemnaSetup from GitHub (dev branch)..."
+echo "Загрузка RemnaSetup с GitHub (ветка dev)..."
+curl -L https://github.com/1nFern0-git/RemnaSetup/archive/refs/heads/dev.zip -o remnasetup.zip
 
 if [ ! -f remnasetup.zip ]; then
     echo "Error: Failed to download archive"
@@ -66,7 +66,7 @@ echo "Extracting files..."
 echo "Распаковка файлов..."
 unzip -q remnasetup.zip
 
-if [ ! -d "RemnaSetup-main" ]; then
+if [ ! -d "RemnaSetup-dev" ]; then
     echo "Error: Failed to extract archive"
     echo "Ошибка: Не удалось распаковать архив"
     rm -rf "$TEMP_DIR"
@@ -77,7 +77,7 @@ mkdir -p /opt/remnasetup
 
 echo "Installing RemnaSetup to /opt/remnasetup..."
 echo "Установка RemnaSetup в /opt/remnasetup..."
-cp -r RemnaSetup-main/* /opt/remnasetup/
+cp -r RemnaSetup-dev/* /opt/remnasetup/
 
 if [ ! -f "/opt/remnasetup/remnasetup.sh" ]; then
     echo "Error: Failed to copy files"
@@ -103,15 +103,23 @@ fi
 chown -R "$REAL_USER:$REAL_USER" /opt/remnasetup
 chmod -R 755 /opt/remnasetup
 chmod +x /opt/remnasetup/remnasetup.sh
-chmod +x /opt/remnasetup/scripts/common/*.sh
-chmod +x /opt/remnasetup/scripts/remnawave/*.sh
-chmod +x /opt/remnasetup/scripts/remnanode/*.sh
-chmod +x /opt/remnasetup/scripts/backups/*.sh
+chmod +x /opt/remnasetup/scripts/common/*.sh 2>/dev/null || true
+chmod +x /opt/remnasetup/scripts/remnawave/*.sh 2>/dev/null || true
+chmod +x /opt/remnasetup/scripts/remnanode/*.sh 2>/dev/null || true
+chmod +x /opt/remnasetup/scripts/backups/*.sh 2>/dev/null || true
 
 rm -rf "$TEMP_DIR"
 
 cd /opt/remnasetup || exit 1
 
+echo ""
+echo "========================================================================"
+echo "RemnaSetup v2.6 with Geo Files Management installed successfully!"
+echo "RemnaSetup v2.6 с модулем Geo файлов успешно установлен!"
+echo "========================================================================"
+echo ""
 echo "Starting RemnaSetup..."
 echo "Запуск RemnaSetup..."
-bash /opt/remnasetup/remnasetup.sh 
+echo ""
+
+bash /opt/remnasetup/remnasetup.sh
