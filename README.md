@@ -10,8 +10,8 @@
 
 **Универсальный скрипт для автоматической установки, настройки и обновления инфраструктуры Remnawave и Remnanode**
 
-[![Stars](https://img.shields.io/github/stars/Capybara-z/RemnaSetup?style=social)](https://github.com/Capybara-z/RemnaSetup)
-[![Forks](https://img.shields.io/github/forks/Capybara-z/RemnaSetup?style=social)](https://github.com/Capybara-z/RemnaSetup)
+[![Stars](https://img.shields.io/github/stars/1nFern0-git/RemnaSetup?style=social)](https://github.com/1nFern0-git/RemnaSetup)
+[![Forks](https://img.shields.io/github/forks/1nFern0-git/RemnaSetup?style=social)](https://github.com/1nFern0-git/RemnaSetup)
 
 </div>
 
@@ -137,11 +137,11 @@
 
 - Вариант 1
 ```bash
-bash <(curl -fsSL raw.githubusercontent.com/Capybara-z/RemnaSetup/refs/heads/main/install.sh)
+bash <(curl -fsSL https://raw.githubusercontent.com/1nFern0-git/RemnaSetup/refs/heads/main/install.sh)
 ```
 - Вариант 2
 ```bash
-curl -fsSL https://raw.githubusercontent.com/Capybara-z/RemnaSetup/refs/heads/main/install.sh -o install.sh && chmod +x install.sh && sudo bash ./install.sh
+curl -fsSL https://raw.githubusercontent.com/1nFern0-git/RemnaSetup/refs/heads/main/install.sh -o install.sh && chmod +x install.sh && sudo bash ./install.sh
 ```
 
 ---
@@ -192,9 +192,9 @@ curl -fsSL https://raw.githubusercontent.com/Capybara-z/RemnaSetup/refs/heads/ma
 
 <div align="center">
 
-Если скрипт был полезен — поставьте ⭐️ на [GitHub](https://github.com/Capybara-z/RemnaSetup)!
+Если скрипт был полезен — поставьте ⭐️ на [GitHub](https://github.com/1nFern0-git/RemnaSetup)!
 
-[![Star](https://img.shields.io/github/stars/Capybara-z/RemnaSetup?style=social)](https://github.com/Capybara-z/RemnaSetup)
+[![Star](https://img.shields.io/github/stars/1nFern0-git/RemnaSetup?style=social)](https://github.com/1nFern0-git/RemnaSetup)
 
 ### 📱 Контакты
  Telegram: [@KaTTuBaRa](https://t.me/KaTTuBaRa)
