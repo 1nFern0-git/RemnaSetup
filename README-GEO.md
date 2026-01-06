@@ -16,31 +16,32 @@
 
 ## 📥 Установка
 
-### Вариант 1: Новая установка RemnaSetup v2.6
-
-Самый простой способ - установить RemnaSetup v2.6 Enhanced Edition:
+### Вариант 1: Модификация существующей установки
 
 ```bash
-bash <(curl -fsSL https://raw.githubusercontent.com/1nFern0-git/RemnaSetup/dev/install.sh)
+# Скачиваем новый скрипт управления geo файлами
+sudo wget -O /opt/remnasetup/scripts/remnanode/install-geo.sh \
+  https://raw.githubusercontent.com/ваш-репозиторий/install-geo.sh
+
+# Делаем исполняемым
+sudo chmod +x /opt/remnasetup/scripts/remnanode/install-geo.sh
+
+# Добавляем переводы в languages.sh
+sudo cat languages-geo-addon.sh >> /opt/remnasetup/scripts/common/languages.sh
+
+# Заменяем основной скрипт
+sudo cp remnasetup.sh /opt/remnasetup/remnasetup.sh
+sudo chmod +x /opt/remnasetup/remnasetup.sh
 ```
 
-После установки geo модуль уже будет встроен в меню.
+### Вариант 2: Чистая установка
 
-### Вариант 2: Модификация существующей установки
-
-Если у вас уже установлен оригинальный RemnaSetup:
+Если вы устанавливаете RemnaSetup впервые, используйте модифицированную версию:
 
 ```bash
-# Скачиваем и применяем патч
-bash <(curl -fsSL https://raw.githubusercontent.com/1nFern0-git/RemnaSetup/dev/apply-geo-patch.sh)
-```
-
-### Вариант 3: Клонирование репозитория
-
-```bash
-# Клонируйте репозиторий (ветка dev)
-git clone -b dev https://github.com/1nFern0-git/RemnaSetup.git
-cd RemnaSetup
+# Клонируйте модифицированный репозиторий
+git clone https://github.com/ваш-репозиторий/RemnaSetup-modified.git
+cd RemnaSetup-modified
 
 # Запустите установку
 sudo bash install.sh
