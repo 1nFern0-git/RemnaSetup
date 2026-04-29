@@ -34,9 +34,9 @@ fi
 
 cd "$TEMP_DIR" || exit 1
 
-echo "Downloading RemnaSetup from GitHub (dev branch)..."
-echo "Загрузка RemnaSetup с GitHub (ветка dev)..."
-curl -L https://github.com/1nFern0-git/RemnaSetup/archive/refs/heads/dev.zip -o remnasetup.zip
+echo "Downloading RemnaSetup from GitHub (main branch)..."
+echo "Загрузка RemnaSetup с GitHub (ветка main)..."
+curl -L https://github.com/1nFern0-git/RemnaSetup/archive/refs/heads/main.zip -o remnasetup.zip
 
 if [ ! -f remnasetup.zip ]; then
     echo "Error: Failed to download archive"
@@ -68,7 +68,7 @@ echo "Extracting files..."
 echo "Распаковка файлов..."
 unzip -q remnasetup.zip
 
-if [ ! -d "RemnaSetup-dev" ]; then
+if [ ! -d "RemnaSetup-main" ]; then
     echo "Error: Failed to extract archive"
     echo "Ошибка: Не удалось распаковать архив"
     rm -rf "$TEMP_DIR"
@@ -79,7 +79,7 @@ mkdir -p /opt/remnasetup
 
 echo "Installing RemnaSetup to /opt/remnasetup..."
 echo "Установка RemnaSetup в /opt/remnasetup..."
-cp -r RemnaSetup-dev/* /opt/remnasetup/
+cp -r RemnaSetup-main/* /opt/remnasetup/
 
 if [ ! -f "/opt/remnasetup/remnasetup.sh" ]; then
     echo "Error: Failed to copy files"
