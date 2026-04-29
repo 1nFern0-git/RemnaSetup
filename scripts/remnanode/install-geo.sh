@@ -139,7 +139,23 @@ patch_docker_compose() {
 
 log "=== Начало обновления geo файлов ==="
 
-# Скачиваем новые файлы во временную директорию
+# Определяем первичную ноду (первая найденная директория)
+PRIMARY_NODE=""
+for _dir in /opt/remnanode /opt/remnanode1 /opt/remnanode2 /opt/remnanode3; do
+    if [ -d "$_dir" ]; then
+        PRIMARY_NODE="$_dir"
+        break
+    fi
+done
+
+if [ -z "$PRIMARY_NODE" ]; then
+    log "❌ Ни одной директории ноды не найдено"
+    exit 1
+fi
+
+log "Первичная нода: $PRIMARY_NODE"
+
+# Скачиваем файлы один раз во временную директорию
 TEMP_DIR=$(mktemp -d)
 cd "$TEMP_DIR" || exit 1
 
@@ -161,20 +177,33 @@ else
     exit 1
 fi
 
+# Копируем файлы только в первичную ноду
+cp geoip.dat "$PRIMARY_NODE/"
+cp geosite.dat "$PRIMARY_NODE/"
+log "✅ Geo файлы скопированы в $PRIMARY_NODE"
+
 # Обновляем для всех существующих контейнеров
-for node_dir in /opt/remnanode /opt/remnanode2 /opt/remnanode3; do
+for node_dir in /opt/remnanode /opt/remnanode1 /opt/remnanode2 /opt/remnanode3; do
     if [ -d "$node_dir" ]; then
         node_name=$(basename "$node_dir")
         log "Обновление $node_name..."
-        
+
         # Проверяем и патчим docker-compose.yml
         compose_file="$node_dir/docker-compose.yml"
         patch_docker_compose "$compose_file" "$node_name"
-        
-        # Копируем файлы
-        cp geoip.dat "$node_dir/"
-        cp geosite.dat "$node_dir/"
-        
+
+        # Для вторичных нод — симлинки на файлы первичной
+        if [ "$node_dir" != "$PRIMARY_NODE" ]; then
+            for geo_file in geoip.dat geosite.dat; do
+                target="$PRIMARY_NODE/$geo_file"
+                link="$node_dir/$geo_file"
+                if [ ! -L "$link" ] || [ "$(readlink "$link")" != "$target" ]; then
+                    ln -sf "$target" "$link"
+                    log "🔗 Симлинк: $link -> $target"
+                fi
+            done
+        fi
+
         # Пересоздаем контейнер если он запущен (для применения новых volumes)
         container_name="${node_name}"
         if docker ps -a --format '{{.Names}}' | grep -q "^${container_name}$"; then
@@ -220,7 +249,7 @@ initial_update() {
     
     # Сначала патчим все docker-compose.yml файлы
     info "Проверка docker-compose.yml файлов..."
-    for node_dir in /opt/remnanode /opt/remnanode2 /opt/remnanode3; do
+    for node_dir in /opt/remnanode /opt/remnanode1 /opt/remnanode2 /opt/remnanode3; do
         if [ -d "$node_dir" ]; then
             node_name=$(basename "$node_dir")
             compose_file="$node_dir/docker-compose.yml"
