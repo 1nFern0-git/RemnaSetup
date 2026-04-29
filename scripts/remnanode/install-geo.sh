@@ -52,13 +52,27 @@ patch_docker_compose() {
     if grep -q "volumes:" "$compose_file"; then
         # Секция volumes уже есть, добавляем наши строки
         if ! grep -q "geoip.dat" "$compose_file"; then
-            sed -i '/volumes:/a\      - ./geoip.dat:/usr/local/share/xray/geoip.dat\n      - ./geosite.dat:/usr/local/share/xray/geosite.dat' "$compose_file"
+            awk '/volumes:/ && !found {
+                print
+                print "      - ./geoip.dat:/usr/local/share/xray/geoip.dat"
+                print "      - ./geosite.dat:/usr/local/share/xray/geosite.dat"
+                found=1
+                next
+            } 1' "$compose_file" > "${compose_file}.tmp" && mv "${compose_file}.tmp" "$compose_file"
         fi
     else
         # Нет секции volumes, добавляем после environment
-        sed -i '/environment:/a\    volumes:\n      - /var/log/'$node_name':/var/log/'$node_name'\n      - ./geoip.dat:/usr/local/share/xray/geoip.dat\n      - ./geosite.dat:/usr/local/share/xray/geosite.dat' "$compose_file"
+        awk '/environment:/ && !found {
+            print
+            print "    volumes:"
+            print "      - /var/log/'"$node_name"':/var/log/'"$node_name"'"
+            print "      - ./geoip.dat:/usr/local/share/xray/geoip.dat"
+            print "      - ./geosite.dat:/usr/local/share/xray/geosite.dat"
+            found=1
+            next
+        } 1' "$compose_file" > "${compose_file}.tmp" && mv "${compose_file}.tmp" "$compose_file"
     fi
-    
+
     success "Volumes добавлены в docker-compose.yml для $node_name"
     return 0
 }
@@ -165,11 +179,11 @@ for node_dir in /opt/remnanode /opt/remnanode2 /opt/remnanode3; do
         container_name="${node_name}"
         if docker ps -a --format '{{.Names}}' | grep -q "^${container_name}$"; then
             log "Пересоздание контейнера $container_name с новыми volumes..."
-            cd "$node_dir"
-            docker compose down >> "$LOG_FILE" 2>&1
-            docker compose up -d >> "$LOG_FILE" 2>&1
-            log "✅ $container_name перезапущен с обновленной конфигурацией"
-            cd - > /dev/null
+            if (cd "$node_dir" && docker compose down >> "$LOG_FILE" 2>&1 && docker compose up -d >> "$LOG_FILE" 2>&1); then
+                log "✅ $container_name перезапущен с обновленной конфигурацией"
+            else
+                log "❌ Ошибка перезапуска $container_name"
+            fi
         fi
     fi
 done
@@ -245,23 +259,13 @@ show_menu() {
     echo -e "${BOLD_CYAN}$(get_string "install_geo_menu_title")${RESET}"
     echo -e "${MAGENTA}────────────────────────────────────────────────────────────${RESET}"
     
-    if [ "$LANGUAGE" = "en" ]; then
-        echo -e "${BLUE}1. Install/Update geo files${RESET}"
-        echo -e "${BLUE}2. Configure automatic updates${RESET}"
-        echo -e "${BLUE}3. Run manual update${RESET}"
-        echo -e "${BLUE}4. Show update log${RESET}"
-        echo -e "${BLUE}5. Show cron schedule${RESET}"
-        echo -e "${BLUE}6. Remove automatic updates${RESET}"
-        echo -e "${RED}0. Back${RESET}"
-    else
-        echo -e "${BLUE}1. Установить/Обновить geo файлы${RESET}"
-        echo -e "${BLUE}2. Настроить автоматическое обновление${RESET}"
-        echo -e "${BLUE}3. Запустить ручное обновление${RESET}"
-        echo -e "${BLUE}4. Показать лог обновления${RESET}"
-        echo -e "${BLUE}5. Показать расписание cron${RESET}"
-        echo -e "${BLUE}6. Удалить автоматическое обновление${RESET}"
-        echo -e "${RED}0. Назад${RESET}"
-    fi
+    echo -e "${BLUE}1. $(get_string "install_geo_opt_install")${RESET}"
+    echo -e "${BLUE}2. $(get_string "install_geo_opt_auto_update")${RESET}"
+    echo -e "${BLUE}3. $(get_string "install_geo_opt_manual_update")${RESET}"
+    echo -e "${BLUE}4. $(get_string "install_geo_opt_show_log")${RESET}"
+    echo -e "${BLUE}5. $(get_string "install_geo_opt_show_cron")${RESET}"
+    echo -e "${BLUE}6. $(get_string "install_geo_opt_remove_cron")${RESET}"
+    echo -e "${RED}0. $(get_string "install_geo_opt_back")${RESET}"
     
     echo -e "${MAGENTA}────────────────────────────────────────────────────────────${RESET}"
     echo
@@ -279,7 +283,7 @@ remove_cron() {
     
     success "$(get_string "install_geo_cron_removed")"
     
-    read -n 1 -s -r -p "$(get_string "press_any_key")"
+    pause_press_key "$(get_string "press_any_key")"
 }
 
 main() {
@@ -291,13 +295,13 @@ main() {
                 create_update_script
                 initial_update
                 show_log
-                read -n 1 -s -r -p "$(get_string "press_any_key")"
+                pause_press_key "$(get_string "press_any_key")"
                 ;;
             2)
                 create_update_script
                 setup_cron
                 show_crontab
-                read -n 1 -s -r -p "$(get_string "press_any_key")"
+                pause_press_key "$(get_string "press_any_key")"
                 ;;
             3)
                 if [ ! -f /usr/local/bin/update-remnanode-geo.sh ]; then
@@ -305,15 +309,15 @@ main() {
                 fi
                 /usr/local/bin/update-remnanode-geo.sh
                 show_log
-                read -n 1 -s -r -p "$(get_string "press_any_key")"
+                pause_press_key "$(get_string "press_any_key")"
                 ;;
             4)
                 show_log
-                read -n 1 -s -r -p "$(get_string "press_any_key")"
+                pause_press_key "$(get_string "press_any_key")"
                 ;;
             5)
                 show_crontab
-                read -n 1 -s -r -p "$(get_string "press_any_key")"
+                pause_press_key "$(get_string "press_any_key")"
                 ;;
             6)
                 remove_cron

@@ -13,6 +13,6 @@ services:
         hard: 1048576
     environment:
       - NODE_PORT=$NODE_PORT
-      - SECRET_KEY="$SECRET_KEY"
+      - SECRET_KEY=$SECRET_KEY
     volumes:
       - /var/log/remnanode:/var/log/remnanode

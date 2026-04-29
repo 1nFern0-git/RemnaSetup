@@ -1092,6 +1092,22 @@ LANG_STRINGS["ru_install_geo_no_crontab"]="Задачи обновления geo
 LANG_STRINGS["ru_install_geo_removing_cron"]="Удаление автоматического обновления из cron..."
 LANG_STRINGS["ru_install_geo_cron_removed"]="Автоматические обновления удалены из cron"
 
+LANG_STRINGS["en_install_geo_opt_install"]="Install/Update geo files"
+LANG_STRINGS["en_install_geo_opt_auto_update"]="Configure automatic updates"
+LANG_STRINGS["en_install_geo_opt_manual_update"]="Run manual update"
+LANG_STRINGS["en_install_geo_opt_show_log"]="Show update log"
+LANG_STRINGS["en_install_geo_opt_show_cron"]="Show cron schedule"
+LANG_STRINGS["en_install_geo_opt_remove_cron"]="Remove automatic updates"
+LANG_STRINGS["en_install_geo_opt_back"]="Back"
+
+LANG_STRINGS["ru_install_geo_opt_install"]="Установить/Обновить geo файлы"
+LANG_STRINGS["ru_install_geo_opt_auto_update"]="Настроить автоматическое обновление"
+LANG_STRINGS["ru_install_geo_opt_manual_update"]="Запустить ручное обновление"
+LANG_STRINGS["ru_install_geo_opt_show_log"]="Показать лог обновления"
+LANG_STRINGS["ru_install_geo_opt_show_cron"]="Показать расписание cron"
+LANG_STRINGS["ru_install_geo_opt_remove_cron"]="Удалить автоматическое обновление"
+LANG_STRINGS["ru_install_geo_opt_back"]="Назад"
+
 get_string() {
     local key="$1"
     local lang_key="${LANGUAGE}_${key}"
