@@ -382,10 +382,10 @@ show_menu() {
 remove_cron() {
     info "$(get_string "install_geo_removing_cron")"
     
-    crontab -l 2>/dev/null | grep -v "geoip\|geosite\|remnanode.*geo" > /tmp/crontab.tmp || true
+    crontab -l 2>/dev/null | grep -v "update-remnanode-geo" > /tmp/crontab.tmp || true
     crontab /tmp/crontab.tmp
-    rm /tmp/crontab.tmp
-    
+    rm -f /tmp/crontab.tmp
+
     success "$(get_string "install_geo_cron_removed")"
     
     pause_press_key "$(get_string "press_any_key")"
