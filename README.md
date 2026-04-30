@@ -47,6 +47,15 @@ curl -fsSL https://raw.githubusercontent.com/1nFern0-git/RemnaSetup/refs/heads/m
 - WARP-NATIVE (by distillium)
 - BBR оптимизация
 
+### 🌍 Управление Geo файлами (для нод)
+
+Автоматическое обновление geo-файлов для xray из [runetfreedom/russia-v2ray-rules-dat](https://github.com/runetfreedom/russia-v2ray-rules-dat).
+
+- Автопатч `docker-compose.yml` — volumes для geo-файлов добавляются автоматически
+- При нескольких нодах на сервере: файлы скачиваются один раз, вторичные ноды используют симлинки
+- Настраиваемое расписание cron: **ежедневно / еженедельно / ежемесячно** с выбором времени
+- Ручное и автоматическое обновление через меню → **Remnanode → Управление Geo файлами**
+
 ---
 
 ## Non-interactive режим

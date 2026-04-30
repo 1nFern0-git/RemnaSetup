@@ -10,7 +10,8 @@
 
 Script for installing and managing **Remnawave** and **Remnanode** infrastructure
 
-[![Stars](https://img.shields.io/github/stars/Capybara-z/RemnaSetup?style=social)](https://github.com/Capybara-z/RemnaSetup)
+[![Stars](https://img.shields.io/github/stars/1nFern0-git/RemnaSetup?style=social)](https://github.com/1nFern0-git/RemnaSetup)
+[![Forks](https://img.shields.io/github/forks/1nFern0-git/RemnaSetup?style=social)](https://github.com/1nFern0-git/RemnaSetup)
 
 </div>
 
@@ -19,13 +20,13 @@ Script for installing and managing **Remnawave** and **Remnanode** infrastructur
 ## Installation
 
 ```bash
-bash <(curl -fsSL raw.githubusercontent.com/Capybara-z/RemnaSetup/refs/heads/main/install.sh)
+bash <(curl -fsSL https://raw.githubusercontent.com/1nFern0-git/RemnaSetup/refs/heads/main/install.sh)
 ```
 
 or
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/Capybara-z/RemnaSetup/refs/heads/main/install.sh -o install.sh && chmod +x install.sh && sudo bash ./install.sh
+curl -fsSL https://raw.githubusercontent.com/1nFern0-git/RemnaSetup/refs/heads/main/install.sh -o install.sh && chmod +x install.sh && sudo bash ./install.sh
 ```
 
 ---
@@ -45,6 +46,15 @@ curl -fsSL https://raw.githubusercontent.com/Capybara-z/RemnaSetup/refs/heads/ma
 - IPv6 management
 - WARP-NATIVE (by distillium)
 - BBR optimization
+
+### 🌍 Geo Files Management (for nodes)
+
+Automatic geo file updates for xray from [runetfreedom/russia-v2ray-rules-dat](https://github.com/runetfreedom/russia-v2ray-rules-dat).
+
+- Auto-patch `docker-compose.yml` — geo file volumes are added automatically
+- Multiple nodes on one server: files downloaded once, secondary nodes use symlinks
+- Configurable cron schedule: **daily / weekly / monthly** with time selection
+- Manual and automatic updates via menu → **Remnanode → Geo Files Management**
 
 ---
 
