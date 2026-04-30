@@ -230,17 +230,93 @@ SCRIPT_EOF
 # Настройка cron
 setup_cron() {
     info "$(get_string "install_geo_setup_cron")"
-    
-    # Удаляем старые записи
-    crontab -l 2>/dev/null | grep -v "geoip\|geosite\|remnanode.*geo" > /tmp/crontab.tmp || true
-    
-    # Добавляем новую запись (обновление каждую неделю в воскресенье в 3:00)
-    echo "0 3 * * 0 /usr/local/bin/update-remnanode-geo.sh" >> /tmp/crontab.tmp
-    
+    echo ""
+
+    # Выбор типа расписания
+    echo -e "${BLUE}1. $(get_string "install_geo_cron_type_daily")${RESET}"
+    echo -e "${BLUE}2. $(get_string "install_geo_cron_type_weekly")${RESET}"
+    echo -e "${BLUE}3. $(get_string "install_geo_cron_type_monthly")${RESET}"
+    echo ""
+
+    while true; do
+        question "$(get_string "install_geo_cron_select_type")"
+        CRON_TYPE="$REPLY"
+        if [[ "$CRON_TYPE" =~ ^[123]$ ]]; then
+            break
+        fi
+        warn "$(get_string "install_geo_cron_invalid_type")"
+    done
+
+    # День недели (для еженедельного)
+    CRON_DOW="*"
+    if [[ "$CRON_TYPE" == "2" ]]; then
+        echo ""
+        echo -e "${BLUE}1. $(get_string "install_geo_cron_weekday_1")${RESET}"
+        echo -e "${BLUE}2. $(get_string "install_geo_cron_weekday_2")${RESET}"
+        echo -e "${BLUE}3. $(get_string "install_geo_cron_weekday_3")${RESET}"
+        echo -e "${BLUE}4. $(get_string "install_geo_cron_weekday_4")${RESET}"
+        echo -e "${BLUE}5. $(get_string "install_geo_cron_weekday_5")${RESET}"
+        echo -e "${BLUE}6. $(get_string "install_geo_cron_weekday_6")${RESET}"
+        echo -e "${BLUE}7. $(get_string "install_geo_cron_weekday_7")${RESET}"
+        echo ""
+        while true; do
+            question "$(get_string "install_geo_cron_enter_weekday")"
+            DOW_INPUT="$REPLY"
+            if [[ "$DOW_INPUT" =~ ^[1-7]$ ]]; then
+                # 1-6 = Пн-Сб → cron 1-6; 7 = Вс → cron 0
+                [[ "$DOW_INPUT" == "7" ]] && CRON_DOW="0" || CRON_DOW="$DOW_INPUT"
+                break
+            fi
+            warn "$(get_string "install_geo_cron_invalid_weekday")"
+        done
+    fi
+
+    # День месяца (для ежемесячного)
+    CRON_DOM="*"
+    if [[ "$CRON_TYPE" == "3" ]]; then
+        while true; do
+            question "$(get_string "install_geo_cron_enter_monthday")"
+            DOM_INPUT="${REPLY:-1}"
+            if [[ "$DOM_INPUT" =~ ^[0-9]+$ ]] && (( DOM_INPUT >= 1 && DOM_INPUT <= 31 )); then
+                CRON_DOM="$DOM_INPUT"
+                break
+            fi
+            warn "$(get_string "install_geo_cron_invalid_monthday")"
+        done
+    fi
+
+    # Час
+    while true; do
+        question "$(get_string "install_geo_cron_enter_hour")"
+        HOUR_INPUT="${REPLY:-3}"
+        if [[ "$HOUR_INPUT" =~ ^[0-9]+$ ]] && (( HOUR_INPUT >= 0 && HOUR_INPUT <= 23 )); then
+            CRON_HOUR="$HOUR_INPUT"
+            break
+        fi
+        warn "$(get_string "install_geo_cron_invalid_hour")"
+    done
+
+    # Минуты
+    while true; do
+        question "$(get_string "install_geo_cron_enter_minute")"
+        MIN_INPUT="${REPLY:-0}"
+        if [[ "$MIN_INPUT" =~ ^[0-9]+$ ]] && (( MIN_INPUT >= 0 && MIN_INPUT <= 59 )); then
+            CRON_MIN="$MIN_INPUT"
+            break
+        fi
+        warn "$(get_string "install_geo_cron_invalid_minute")"
+    done
+
+    # Строим cron-выражение: минуты часы день-месяца месяц день-недели
+    CRON_EXPR="$CRON_MIN $CRON_HOUR $CRON_DOM * $CRON_DOW"
+
+    # Удаляем старые записи и добавляем новую
+    crontab -l 2>/dev/null | grep -v "update-remnanode-geo" > /tmp/crontab.tmp || true
+    echo "$CRON_EXPR /usr/local/bin/update-remnanode-geo.sh" >> /tmp/crontab.tmp
     crontab /tmp/crontab.tmp
-    rm /tmp/crontab.tmp
-    
-    success "$(get_string "install_geo_cron_configured")"
+    rm -f /tmp/crontab.tmp
+
+    success "$(get_string "install_geo_cron_configured"): ${CRON_EXPR}"
 }
 
 # Первичное обновление
